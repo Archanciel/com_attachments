@@ -210,7 +210,7 @@ for ($i=0, $n=count($attachments); $i < $n; $i++) {
 				}
 			}
 		$html .= "</a>";
-		$html .= "<a class=\"at_url\" href=\"$url\"$target title=\"$tooltip\">$filename</a>";
+		// $html .= "<a class=\"at_url\" href=\"$url\"$target title=\"$tooltip\">$filename</a>"; JPS: don't want to display the file name !
 		}
 	else {
 		$tooltip = JText::sprintf('ATTACH_DOWNLOAD_THIS_FILE_S', $actual_filename);

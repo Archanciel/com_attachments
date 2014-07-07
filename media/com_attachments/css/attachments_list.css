@@ -54,7 +54,7 @@ div.attachmentsList table tbody tr.odd td
 div.attachmentsList tbody tr.even td,
 div.attachmentsList tbody tr.even
 {
-    background-color: #EEE;
+    background-color: transparent;
 }
 
 #main div.attachmentsList  tr.unpublished,
@@ -85,7 +85,7 @@ div.attachmentsList table tbody td {
 
 #main div.attachmentsList table tbody tr.even td,
 div.attachmentsList table tbody tr.even td {
-    background-color: #EEE;
+    background-color: transparent;
 }
 
 #main div.attachmentsList table tbody tr.unpublished td,
@@ -210,10 +210,10 @@ div.addattach a.modal-button:active { background: transparent; }
 
 /* ---- Misc ----- */
 
-div#main div.requestLogin h1 {
-    color: #135cae;
-    font-size: 150%;
-    line-height: 150%;
+div#main div.requestLogin {
+	color: #B7DD7E;
+    font-size: 22px;
+    line-height: 130%;
 }
 
 div#main div.requestLogin h2 {

@@ -238,7 +238,9 @@ class AttachmentsHelper
 			$errmsg = JText::sprintf('ATTACH_ERROR_ADDING_INDEX_HTML_IN_S', $upload_dir) . ' (ERR 31)';
 			JError::raiseError(500, $errmsg);
 			}
-
+		
+		return true;	// JPS: skip the damned code below. Don't want the .htaccess to be changed !
+			
 		// If this is secure, create the .htindex file, if necessary
 		$hta_fname = $upload_dir.'/.htaccess';
 		jimport('joomla.filesystem.file');
@@ -435,8 +437,11 @@ class AttachmentsHelper
 		// (Note: The following replacement is necessary to allow
 		//        single quotes in filenames to work correctly.)
 		// Trim of any trailing period (to avoid exploits)
-		$filename = rtrim(JString::str_ireplace("\'", "'", $_FILES['upload']['name']), '.');
-		$ftype = $_FILES['upload']['type'];
+		// $filename = rtrim(JString::str_ireplace("\'", "'", $_FILES['upload']['name']), '.');
+		$upload_filepath = JRequest::getVar( 'upload', '', 'get');  // JPS: this retrieves the full file path from which the file name is extraced !
+		$filename = basename($upload_filepath);
+		// $ftype = $_FILES['upload']['type'];
+		$ftype = 'audio/mpeg';	// JPS: type is not available in the $_GET request structure. So, it must be populated by code !
 
 		// Check the file size
 		$max_upload_size = (int)ini_get('upload_max_filesize');
@@ -511,9 +516,10 @@ class AttachmentsHelper
 			}
 
 		// Make sure a file was successfully uploaded
-		if ( (($_FILES['upload']['size'] == 0) &&
-			  ($_FILES['upload']['tmp_name'] == '')) || $bad_chars || $bad_filename ) {
-
+		// JPS: since post form method was set to get, $_FILES is empty and testing it must be skipped !
+		// if ( (($_FILES['upload']['size'] == 0) &&
+		//	  ($_FILES['upload']['tmp_name'] == '')) || $bad_chars || $bad_filename ) {
+		if (TRUE == FALSE){ // JPS: skip if body !
 			// Guess the type of error
 			if ( $bad_chars ) {
 				$error = 'bad_chars';
@@ -713,8 +719,9 @@ class AttachmentsHelper
 		$upload_dir = JPATH_SITE.'/'.$upload_url;
 
 		// Figure out the system filename
-		$path = $parent->getAttachmentPath($attachment->parent_entity,
-										   $attachment->parent_id, null);
+		// JPS: don't want to upload elsewhere than in the attachment root dir !
+		// $path = $parent->getAttachmentPath($attachment->parent_entity,
+		//								   $attachment->parent_id, null);
 		$fullpath = $upload_dir.'/'.$path;
 
 		// Make sure the directory exists
@@ -752,7 +759,7 @@ class AttachmentsHelper
 		$duplicate_filename = false;
 		if ( ($save_type == 'upload') && JFile::exists($filename_sys) ) {
 			// Cannot overwrite an existing file when creating a new attachment!
-			$duplicate_filename = true;
+			// $duplicate_filename = true; JPS as the attached file was already uploaded with FileZilla on thr server, this is not an error !
 			}
 		if ( ($save_type == 'update') && JFile::exists($filename_sys) ) {
 			// If updating, we may replace the existing file but may not overwrite any other existing file
@@ -817,7 +824,13 @@ class AttachmentsHelper
 		$attachment->filename_sys = $filename_sys;
 		$attachment->url = $url;
 		$attachment->file_type = $ftype;
-		$attachment->file_size = $_FILES['upload']['size'];
+		
+		// JPS: $_FILES is not populated since form method changed from post to get. Do a filesize() instead if the file size was not specified in the form !
+		// $attachment->file_size = $_FILES['upload']['size'];
+		if ($attachment->file_size == 0) {
+			$attachment->file_size = filesize($filename_sys);
+		}   // else comes from the add attachment form and is transferred through the bind in 
+			// administrator\components\com_attachments\controllers\attachment.php !
 
 		// If the user is not authorised to change the state (eg, publish/unpublish),
 		// ignore the form data and make sure the publish state is is set correctly.
@@ -873,7 +886,8 @@ class AttachmentsHelper
 
 		// Move the file
 		$msg = "";
-		if (JFile::upload($_FILES['upload']['tmp_name'], $filename_sys)) {
+		// JPS: don't want to phyaically upload the file !
+		if (TRUE or JFile::upload($_FILES['upload']['tmp_name'], $filename_sys)) {
 			$file_size = (int)( $attachment->file_size / 1024.0 );
 			$file_size_str = JText::sprintf('ATTACH_S_KB', $file_size);
 			if ( $file_size_str == 'ATTACH_S_KB' ) {
@@ -1649,7 +1663,7 @@ class AttachmentsHelper
 
 		// Figure out the new system filename
 		$new_path = $parent->getAttachmentPath($parent_entity, $new_parent_id, null);
-		$new_fullpath = $upload_dir.'/'.$new_path;
+		$new_fullpath = $upload_dir.'/';
 
 		// Make sure the new directory exists
 		jimport('joomla.filesystem.folder');

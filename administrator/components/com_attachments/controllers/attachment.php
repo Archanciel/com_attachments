@@ -242,7 +242,7 @@ class AttachmentsControllerAttachment extends JControllerFormLegacy
 	public function saveNew()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
+//		JSession::checkToken() or die(JText::_('JINVALID_TOKEN')); JPS: since form method is get instead of post, checkToken fails !
 
 		// Access check.
 		$user = JFactory::getUser();
@@ -300,7 +300,7 @@ class AttachmentsControllerAttachment extends JControllerFormLegacy
 		$model		= $this->getModel();
 		$attachment = $model->getTable();
 
-		if (!$attachment->bind(JRequest::get('post'))) {
+		if (!$attachment->bind(JRequest::get('get'))) { // JPS: since the form method was changed from post to get
 			$errmsg = $attachment->getError() . ' (ERR 128)';
 			JError::raiseError(500, $errmsg);
 			}

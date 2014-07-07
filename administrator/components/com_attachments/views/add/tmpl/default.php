@@ -79,7 +79,7 @@ if ( $attachment->parent_title ) {
 ?>
 <form class="attachmentsBackend" enctype="multipart/form-data"
 	  name="adminForm" id="adminForm"
-	  action="<?php echo $this->save_url; ?>" method="post">
+	  action="<?php echo $this->save_url; ?>" method="get"> <!-- JPS: replace post by get so that the selected file is not physically uploaded in the web server tmp dir ! -->
 	<fieldset class="adminform">
 		<legend><?php echo JText::_('ATTACH_ADD_ATTACHMENT'); ?></legend>
 <table class="admintable">
@@ -165,21 +165,25 @@ if ( $attachment->parent_title ) {
 	<td class="key"><label for="access" class="hasTip" title="<?php echo $this->access_level_tooltip ?>"><?php echo JText::_('JFIELD_ACCESS_LABEL'); ?></label></td>
 	<td><?php echo $this->access_level; ?></td>
   </tr>
+<?php $file_size_tooltip = JText::_('ATTACH_FILE_SIZE_TOOLTIP');?>
 <?php if ( $this->show_user_field_1 ): ?>
   <tr>
-	<td class="key"><label for="user_field_1"><?php echo $this->user_field_1_name; ?></label></td>
+	<td class="key"><label for="user_field_1" ><?php echo $this->user_field_1_name; ?></label></td>
 	<td><input type="text" name="user_field_1" id="user_field_1" size="75" maxlength="100" value="" /></td>
+	<td><label for="file_size" class="hasTip" title="<?php echo $file_size_tooltip;?>"><?php echo 'File size (bytes)'; ?>:</label>
+	<input type="text" name="file_size" id="file_size" size="10" maxlength="10" value="" /></td>
   </tr>
 <?php endif; ?>
+<?php $user_field_2_3_tooltip = JText::_('ATTACH_USER_FIELDS_2_AND_3_TOOLTIP');?>
 <?php if ( $this->show_user_field_2 ): ?>
   <tr>
-	<td class="key"><label for="user_field_2"><?php echo $this->user_field_2_name; ?></label></td>
+	<td class="key"><label for="user_field_2" class="hasTip" title="<?php echo $user_field_2_3_tooltip;?>"><?php echo $this->user_field_2_name; ?></label></td>
 	<td><input type="text" name="user_field_2" id="user_field_2" size="75" maxlength="100" value="" /></td>
   </tr>
 <?php endif; ?>
 <?php if ( $this->show_user_field_3 ): ?>
   <tr>
-	<td class="key"><label for="user_field_3"><?php echo $this->user_field_3_name; ?></label></td>
+	<td class="key"><label for="user_field_3" class="hasTip" title="<?php echo $user_field_2_3_tooltip;?>"><?php echo $this->user_field_3_name; ?></label></td>
 	<td><input type="text" name="user_field_3" id="user_field_3" size="75" maxlength="100" value="" /></td>
   <tr>
 <?php endif; ?>
