@@ -163,3 +163,5 @@ mod_roknavmenu
 com_jce
 /language/fr-FR/fr-FR.com_users.ini
 /language/fr-FR/fr-FR.com_users.ini
+/CONTRIBUTING.md
+/robots.txt.dist
