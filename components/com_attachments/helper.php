@@ -719,9 +719,8 @@ class AttachmentsHelper
 		$upload_dir = JPATH_SITE.'/'.$upload_url;
 
 		// Figure out the system filename
-		// JPS: don't want to upload elsewhere than in the attachment root dir !
-		// $path = $parent->getAttachmentPath($attachment->parent_entity,
-		//								   $attachment->parent_id, null);
+		// JPS: now, attachments path is defuned in the component parms !
+		$path = $parent->getAttachmentPath();
 		$fullpath = $upload_dir.'/'.$path;
 
 		// Make sure the directory exists

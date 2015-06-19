@@ -292,23 +292,15 @@ class AttachmentsPlugin extends JPlugin
 	}
 
 	/**
-	 * Get the path for the uploaded file (on the server file system)
+	 * Get the path for the uploaded file from the com_attachments parameters
 	 *
-	 * Note that this does not include the base directory for attachments.
-	 *
-	 * @param   string  $parent_entity  the type of entity for this parent type
-	 * @param   int     $parent_id      the ID for the parent object
-	 * @param   int     $attachment_id  the ID for the attachment
-	 *
-	 * @return string the directory name for this entity (with trailing '/'!)
+	 * @return string the directory path where the attachments are stored)
 	 */
-	public function getAttachmentPath($parent_entity, $parent_id, $attachment_id)
+	public function getAttachmentPath()
 	{
-		$parent_entity = $this->getCanonicalEntityId($parent_entity);
+		$aparams     = $this->attachmentsParams();
 
-		$path = sprintf("%s/%d/", $parent_entity, $parent_id);
-
-		return $path;
+		return $aparams->get('attachment_path', '');
 	}
 
 	/**

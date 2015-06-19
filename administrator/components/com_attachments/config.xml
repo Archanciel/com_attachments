@@ -177,6 +177,9 @@
 
   <fieldset name="advanced"
 	    label="ATTACH_CONFIG_ADVANCED_SETTINGS_LABEL">
+    <field name="attachment_path" type="text" size="50" default="attachments" 
+	   label="ATTACH_ATTACHMENT_PATH" 
+	   description="ATTACH_ATTACHMENT_PATH_DESCRIPTION" />
     <field name="max_attachment_size" type="text" size="50" default="0" filter="integer"
 	   label="ATTACH_MAX_ATTACHMENT_SIZE" 
 	   description="ATTACH_MAX_ATTACHMENT_SIZE_DESCRIPTION" />
