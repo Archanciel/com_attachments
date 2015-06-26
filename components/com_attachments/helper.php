@@ -176,7 +176,7 @@ class AttachmentsHelper
 		// (This can occur when upgrading pre-2.0 attachments (with prefixes) since
 		// they were all saved in the top-level directory.)
 		jimport('joomla.application.component.helper');
-		$upload_dir = JPATH_SITE.'/'.AttachmentsDefines::$ATTACHMENTS_SUBDIR;
+		$upload_dir = JPATH_SITE.'/'.$parent->getAttachmentPath();
 		$dirend_chars = DIRECTORY_SEPARATOR.'/';
 		if ( realpath(rtrim($upload_dir,$dirend_chars)) == realpath(rtrim($dirname,$dirend_chars)) ) {
 			return;
@@ -417,7 +417,7 @@ class AttachmentsHelper
 		$params = JComponentHelper::getParams('com_attachments');
 
 		// Make sure the attachments directory exists
-		$upload_dir = JPATH_SITE.'/'.AttachmentsDefines::$ATTACHMENTS_SUBDIR;
+		$upload_dir = JPATH_SITE.'/'.$parent->getAttachmentPath();
 		$secure = $params->get('secure', false);
 		if ( !AttachmentsHelper::setup_upload_directory( $upload_dir, $secure ) ) {
 			$errmsg = JText::sprintf('ATTACH_ERROR_UNABLE_TO_SETUP_UPLOAD_DIR_S', $upload_dir) . ' (ERR 33)';
@@ -715,13 +715,14 @@ class AttachmentsHelper
 			}
 		
 		// Define where the attachments go
-		$upload_url = AttachmentsDefines::$ATTACHMENTS_SUBDIR;
+		$upload_url = $parent->getAttachmentPath();
 		$upload_dir = JPATH_SITE.'/'.$upload_url;
 
 		// Figure out the system filename
 		// JPS: now, attachments path is defuned in the component parms !
-		$path = $parent->getAttachmentPath();
-		$fullpath = $upload_dir.'/'.$path;
+		// $path = $parent->getAttachmentPath($attachment->parent_entity,
+		//								   $attachment->parent_id, null);
+		$fullpath = $upload_dir;
 
 		// Make sure the directory exists
 		if ( !JFile::exists($fullpath) ) {
@@ -734,9 +735,9 @@ class AttachmentsHelper
 			}
 
 		// Get ready to save the file
-		$filename_sys = $fullpath . $filename;
+		$filename_sys = $fullpath . '/' . $filename;
 
-		$url = $upload_url . '/' . $path . $filename;
+		$url = $upload_url . '/' . $filename;
 
 		// If we are on windows, fix the filename and URL
 		if ( DIRECTORY_SEPARATOR != '/' ) {
@@ -1657,7 +1658,7 @@ class AttachmentsHelper
 		$params = JComponentHelper::getParams('com_attachments');
 
 		// Define where the attachments move to
-		$upload_url = AttachmentsDefines::$ATTACHMENTS_SUBDIR;
+		$upload_url = $parent->getAttachmentPath();
 		$upload_dir = JPATH_SITE.'/'.$upload_url;
 
 		// Figure out the new system filename
@@ -1793,7 +1794,7 @@ class AttachmentsHelper
 			$params = JComponentHelper::getParams('com_attachments');
 
 			// Check the security status
-			$attach_dir = JPATH_SITE.'/'.AttachmentsDefines::$ATTACHMENTS_SUBDIR;
+			$attach_dir = JPATH_SITE.'/'.$params->get('attachment_path', ''); // $parent object not available here !
 			$secure = $params->get('secure', false);
 			$hta_filename = $attach_dir.'/.htaccess';
 			if ( ($secure && !file_exists($hta_filename)) ||
